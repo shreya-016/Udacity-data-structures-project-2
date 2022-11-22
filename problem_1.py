@@ -10,27 +10,26 @@ class LRU_Cache(object):
         
     def get(self, key):
         if key in self.cache:
-            self.lruKey = self.cache[key]
+            self.lruKey = key
             return self.cache[key]
         return -1
-    
+
     def put(self, key, value):
         if self.cacheSize == self.capacity:
-            # remove the least recently used cache entry
-            #self.cache.pop(self.lruKey)
-            del self.cache[key]
+            self.cache.pop(self.lruKey)
             self.cacheSize -= 1
-        
-        # updating the value if key is present in cache
+
         if key in self.cache:
             self.cache[key] = value
             self.lruKey = key
-        
-        if key not in self.cache:
+
+        else:
             self.cache[key] = value
             self.cacheSize += 1
             self.lruKey = key
             
+    def getLruKey(self):
+        return self.lruKey
             
 cache = LRU_Cache(5)
 
@@ -38,6 +37,8 @@ cache.put('a', 'apple')
 cache.put('b', 'ball')
 cache.put('c', 'cat')
 cache.put('d', 'dog')
+
+print(cache.getLruKey)
 
 print(cache.get('a'))
 print(cache.get('c'))   
@@ -48,6 +49,7 @@ cache.put('j', 'jack')
 print(cache.get('j'))
 
 cache.put('c', 'cache')
+cache.put('l', 'lost')
 cache.put('j', 'jasmine')
 
 print(cache.get('j'))
