@@ -9,13 +9,13 @@ class huffmanTree():
     def children(self):
         return (self.left, self.right)
         
-def tree(node, binString = ''):
+def tree(node, binString=''):
     if type(node) is str:
-        return {node : binString}
-    left, right = node.children()
+        return {node: binString}
+    (left, right) = node.children()
     d = dict()
     d.update(tree(left, binString + '0'))
-    d.update(tree(left, binString + '1'))
+    d.update(tree(right, binString + '1'))
     return d
         
 def huffman_encoding(data):
@@ -30,7 +30,8 @@ def huffman_encoding(data):
     if len(freq) == 1:
         huffmanDict = {data[0] : '0'}
     else:
-        freq = sorted(freq.items(), key=lambda x:-x[1])
+        freq = sorted(freq.items(), key=lambda x: x[1], reverse=True)
+        #freq = sorted(freq.items(), key=lambda x:-x[1])
         nodes = freq
         
         # we can also use heap to more efficiently perform this algorithm
@@ -40,9 +41,11 @@ def huffman_encoding(data):
             nodes = nodes[:-2]
             node = huffmanTree(key1, key2)
             nodes.append((node, val1+val2))
-            nodes = sorted(nodes, key=lambda x:-x[1])
+            #nodes = sorted(nodes, key=lambda x:-x[1])
+            nodes = sorted(nodes, key=lambda x:x[1], reverse = True)
         huffmanDict = tree(nodes[0][0])
         
+    print(huffmanDict)
     huffmanCode = ""
     for char in data:
         huffmanCode += huffmanDict[char]
